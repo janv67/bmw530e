@@ -50,6 +50,9 @@ public class BmwConnectedRequester { //implements SchedulingConfigurer {
 	DBConnector dbConnector;
 
 	@Autowired 
+	GeoCodeServiceConnector geocodeConnector;
+
+	@Autowired 
 	BMWConnector bmwConnector;
 
 	@Bean
@@ -156,6 +159,9 @@ public class BmwConnectedRequester { //implements SchedulingConfigurer {
 				bmwAnswer = restTemplate.exchange(DYNAMIC_URL, HttpMethod.GET, getHttpEntity(), Dynamic.class);
 			}
 		}
+		String longitude = "51.155693";
+		String latitude = "4.5149717";
+		geocodeConnector.scheduleGeoCodeCalls(longitude, latitude);
 		log.info("Dynamic fetched successfully ");
 
 		// store the information using internal API
