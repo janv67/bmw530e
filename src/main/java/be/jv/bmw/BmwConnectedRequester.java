@@ -151,8 +151,8 @@ public class BmwConnectedRequester { //implements SchedulingConfigurer {
 		String port = environment.getProperty("server.port");
 		String datasource = environment.getProperty("spring.datasource.url");
 		
-		log.info("---------------------------------------------------------------");
-		log.info("Op deze poort kan je connecteren!   "+port);
+		System.out.println("---------------------------------------------------------------");
+		System.out.println("Op deze poort kan je connecteren!   "+port);
 		log.info("Datasource waarnaar wordt geschreven"+datasource);
 		log.info("---------------------------------------------------------------");
 		
