@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -62,6 +63,9 @@ public class BmwConnectedRequester { //implements SchedulingConfigurer {
 
 	@Value("${application.url}")
 	private String applicationUrl;
+
+	@Autowired
+	Environment environment;
 
 	@Scheduled(fixedDelay = 300000)
 	public void scheduleLocationCalls() {
@@ -143,6 +147,15 @@ public class BmwConnectedRequester { //implements SchedulingConfigurer {
 
 	@Scheduled(fixedDelay = 300000)
 	public void scheduleDynamicCalls() {
+	
+		String port = environment.getProperty("server.port");
+		String datasource = environment.getProperty("spring.datasource.url");
+		
+		log.info("---------------------------------------------------------------");
+		log.info("Op deze poort kan je connecteren!   "+port);
+		log.info("Datasource waarnaar wordt geschreven"+datasource);
+		log.info("---------------------------------------------------------------");
+		
 		// get the information from BMW
 		RestTemplate restTemplate = new RestTemplate();
 		ResponseEntity<Dynamic> bmwAnswer = null;
