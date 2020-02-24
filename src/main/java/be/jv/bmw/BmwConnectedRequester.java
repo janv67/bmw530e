@@ -151,9 +151,9 @@ public class BmwConnectedRequester { //implements SchedulingConfigurer {
 		String port = environment.getProperty("server.port");
 		String datasource = environment.getProperty("spring.datasource.url");
 		
-		System.out.println("---------------------------------------------------------------");
-		System.out.println("Op deze poort kan je connecteren!   "+port);
-		log.info("Datasource waarnaar wordt geschreven"+datasource);
+		log.info("---------------------------------------------------------------");
+		log.info("Op deze poort kan je connecteren!    "+port);
+		log.info("Datasource waarnaar wordt geschreven "+datasource);
 		log.info("---------------------------------------------------------------");
 		
 		// get the information from BMW
@@ -172,8 +172,8 @@ public class BmwConnectedRequester { //implements SchedulingConfigurer {
 				bmwAnswer = restTemplate.exchange(DYNAMIC_URL, HttpMethod.GET, getHttpEntity(), Dynamic.class);
 			}
 		}
-		String longitude = "51.155693";
-		String latitude = "4.5149717";
+		String longitude = bmwAnswer.getBody().getAttributesMap().getGps_lng();
+		String latitude = bmwAnswer.getBody().getAttributesMap().getGps_lat();
 		geocodeConnector.scheduleGeoCodeCalls(longitude, latitude);
 		log.info("Dynamic fetched successfully ");
 

@@ -42,8 +42,6 @@ public class GeoCodeServiceConnector { //implements SchedulingConfigurer {
 			}
 		}
 		return geocodeAnswer.getBody();
-
-//		callService(restTemplate, bmwAnswer);
 	}
 
 	private HttpEntity<String> getHttpEntity() {
