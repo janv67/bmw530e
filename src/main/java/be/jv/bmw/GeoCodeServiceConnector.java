@@ -34,7 +34,7 @@ public class GeoCodeServiceConnector { //implements SchedulingConfigurer {
 		String geoCodeUrl = GEOCODE_URL.replaceAll("longitude", longitude);
 		geoCodeUrl = geoCodeUrl.replaceAll("latitude", latitude);
 		try {
-//			geocodeAnswer = restTemplate.exchange(geoCodeUrl, HttpMethod.GET, getHttpEntity(), Geocode.class);
+			geocodeAnswer = restTemplate.exchange(geoCodeUrl, HttpMethod.GET, getHttpEntity(), Geocode.class);
 		} catch (Exception e) {
 			if (geocodeAnswer == null) {
 				log.error("GEOCODE Connection error, retrying");

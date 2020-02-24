@@ -141,8 +141,8 @@ public class BmwConnectedRequester { //implements SchedulingConfigurer {
 		headers2.setContentType(MediaType.APPLICATION_JSON);
 		headers2.add("content-type", "application/json");
 		HttpEntity<String> entity2 = new HttpEntity<>(body, headers2);
-		ResponseEntity<Object> result = restTemplate.exchange(applicationUrl + efficiencyUrl, HttpMethod.POST, entity2,
-				Object.class);
+//		ResponseEntity<Object> result = restTemplate.exchange(applicationUrl + efficiencyUrl, HttpMethod.POST, entity2,
+//				Object.class);
 	}
 
 	@Scheduled(fixedDelay = 300000)
