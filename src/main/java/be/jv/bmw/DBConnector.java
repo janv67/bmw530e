@@ -14,9 +14,12 @@ import org.springframework.stereotype.Component;
 import be.jv.bmw.data.dynamic.Dynamic;
 import be.jv.bmw.data.efficiency.Efficiency;
 import be.jv.bmw.data.efficiency.LastTripList;
+import be.jv.bmw.data.geocode.BMWGeocodes;
+import be.jv.bmw.data.geocode.Geocode;
 import be.jv.bmw.data.location.Location;
 import be.jv.bmw.data.repositories.DynamicRespository;
 import be.jv.bmw.data.repositories.EfficiencyRespository;
+import be.jv.bmw.data.repositories.GeocodeRepository;
 import be.jv.bmw.data.repositories.LocationRespository;
 
 @Component
@@ -30,7 +33,10 @@ public class DBConnector {
 
 	@Autowired
 	EfficiencyRespository efficiencyRespository;
-	
+
+	@Autowired
+	GeocodeRepository geocodeRepository;
+
 	private static final Logger log = LoggerFactory.getLogger(DBConnector.class);
 
 	public void storeDynamicInfo(Dynamic dynamic) {
@@ -51,7 +57,7 @@ public class DBConnector {
 			String lastStoredDateTime = storedDynamicInfo.getAttributesMap().getUpdateTime_converted();
 			String deliveredDateTime = dynamic.getAttributesMap().getUpdateTime_converted();
 			if (!deliveredDateTime.equals(lastStoredDateTime)) {
-				storeInfo= true;
+				storeInfo = true;
 			}
 		} else {
 			storeInfo = true;
@@ -81,24 +87,23 @@ public class DBConnector {
 
 	}
 
-	
 	public Efficiency storeEfficiency(Efficiency providedEfficiency) {
 		boolean storeData = false;
 		// get last stored id
 		List<Efficiency> ids = efficiencyRespository.findLast();
 		Object id = ids.get(0);
 		int intId = 0;
-		
+
 		try {
-			intId= Integer.parseInt(id.toString());
+			intId = Integer.parseInt(id.toString());
 		} catch (Exception e) {
 		}
 
 		// get last efficiency registered
 		Optional<Efficiency> storedEfficiency = efficiencyRespository.findById(intId);
 		String lastDatTimeProvided = "last";
-		String lastDatTime ="";
-		
+		String lastDatTime = "";
+
 		if (storedEfficiency.isPresent()) {
 			// Get last stored date from provided efficiency
 			Optional<LastTripList> optional1 = Arrays.stream(providedEfficiency.getLastTripList())
@@ -109,7 +114,7 @@ public class DBConnector {
 				lastDatTimeProvided = p.getLastTrip();
 				log.debug("Lastdatetime from trip from BMW API " + lastDatTimeProvided);
 			}
-			
+
 			// Get last stored date from stored efficiency
 			Efficiency lastStored = storedEfficiency.get();
 			Optional<LastTripList> optional = Arrays.stream(lastStored.getLastTripList())
@@ -118,7 +123,7 @@ public class DBConnector {
 			if (optional.isPresent()) {// Check whether optional has element you are looking for
 				LastTripList p = optional.get();// get it from optional
 				lastDatTime = p.getLastTrip();
-				log.debug("Lastdatetime from trip in db "+lastDatTime);
+				log.debug("Lastdatetime from trip in db " + lastDatTime);
 			}
 
 			if (!lastDatTimeProvided.equals(lastDatTime)) {
@@ -143,6 +148,26 @@ public class DBConnector {
 			log.info("Efficiency stored successfully ");
 		}
 		return newEfficiency;
+	}
+
+	public void storeGeoCode(BMWGeocodes bmwgeo) {
+		log.info("Geolocation is being stored");
+
+		try {
+			geocodeRepository.save(bmwgeo);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public boolean fetchGeoCode(String latitude, String longitude) {
+		Optional<String> geocode = geocodeRepository.findGeocodeInfoByLongLat(latitude, longitude);
+		if (geocode.isPresent()) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }

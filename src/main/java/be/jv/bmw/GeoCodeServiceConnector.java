@@ -4,6 +4,7 @@ import java.util.Collections;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -15,19 +16,46 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import be.jv.bmw.data.geocode.BMWGeocodes;
 import be.jv.bmw.data.geocode.Geocode;
 
 @Configuration
 @EnableAutoConfiguration
 @ComponentScan("be.jv.bmw")
+
+
 @Component
-public class GeoCodeServiceConnector { //implements SchedulingConfigurer {
+public class GeoCodeServiceConnector { 
 
 	private static final Logger log = LoggerFactory.getLogger(GeoCodeServiceConnector.class);
 
-	private static final String GEOCODE_URL = "https://geocode.xyz/longitude,latitude?geoit=json";
+	private static final String GEOCODE_URL = "https://geocode.xyz/latitude,longitude?geoit=json";
+//	private static final String GEOCODE_URL = "http://127.0.0.1:5500/geocode.json";
+
+	@Autowired
+	DBConnector dbConnector;
+
 	
-	public Geocode scheduleGeoCodeCalls(String longitude, String latitude) {
+	public boolean storeGeoCodeCalls(String latitude, String longitude) {
+		boolean isFetched = dbConnector.fetchGeoCode(latitude, longitude);
+		if (!isFetched) {
+			BMWGeocodes geocodes = new BMWGeocodes();
+			Geocode geo = getGeoCodeFromUrl(latitude, longitude);
+			if (geo != null) {
+				geocodes.setLatitude(latitude);
+				geocodes.setLongitude(longitude);
+				geocodes.setStaddress(geo.getStaddress());
+				geocodes.setCity(geo.getCity());
+				geocodes.setStnumber(geo.getStnumber().toString());
+				geocodes.setPostal(geo.getPostal());
+				geocodes.setGeonumber(geo.getGeonumber());
+				dbConnector.storeGeoCode(geocodes);
+			}
+		}
+		return true;
+	}
+	
+	private Geocode getGeoCodeFromUrl(String longitude, String latitude) {
 		// get the information from BMW
 		RestTemplate restTemplate = new RestTemplate();
 		ResponseEntity<Geocode> geocodeAnswer = null;
@@ -38,6 +66,7 @@ public class GeoCodeServiceConnector { //implements SchedulingConfigurer {
 		} catch (Exception e) {
 			if (geocodeAnswer == null) {
 				log.error("GEOCODE Connection error, retrying");
+				log.error(e.getMessage());
 				return null;
 			}
 		}

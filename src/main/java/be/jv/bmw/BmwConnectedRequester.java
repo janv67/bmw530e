@@ -174,7 +174,7 @@ public class BmwConnectedRequester { //implements SchedulingConfigurer {
 		}
 		String longitude = bmwAnswer.getBody().getAttributesMap().getGps_lng();
 		String latitude = bmwAnswer.getBody().getAttributesMap().getGps_lat();
-		geocodeConnector.scheduleGeoCodeCalls(longitude, latitude);
+		geocodeConnector.storeGeoCodeCalls(latitude, longitude);
 		log.info("Dynamic fetched successfully ");
 
 		// store the information using internal API

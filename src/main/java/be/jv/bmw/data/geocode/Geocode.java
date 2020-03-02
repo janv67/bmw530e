@@ -13,7 +13,7 @@ public class Geocode{
 	  private String geocode; 
 	  private String geonumber; 
 	  private String country; 
-	  private Stnumber stnumber; 
+	  private String stnumber; 
 	  private String staddress; 
 	  private String inlatt; 
 	  private Alt alt; 
@@ -100,10 +100,10 @@ public class Geocode{
 	  public void setCountry(String input){
 	  	 this.country = input;
 	  }
-	  public Stnumber getStnumber(){
+	  public String getStnumber(){
 	  	return stnumber; 
 	  }
-	  public void setStnumber(Stnumber input){
+	  public void setStnumber(String input){
 	  	 this.stnumber = input;
 	  }
 	  public String getStaddress(){

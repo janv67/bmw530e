@@ -1,12 +1,14 @@
 package be.jv.bmw.data.geocode;
 
-public class Alt{
-	  private Loc loc; 
+import java.util.List;
 
-	  public Loc getLoc(){
+public class Alt{
+	  private List<Loc> loc; 
+
+	  public List<Loc> getLoc(){
 	  	return loc; 
 	  }
-	  public void setLoc(Loc input){
+	  public void setLoc(List<Loc> input){
 	  	 this.loc = input;
 	  }
 }
