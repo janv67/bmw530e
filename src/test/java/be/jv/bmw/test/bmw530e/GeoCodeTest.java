@@ -1,5 +1,6 @@
 package be.jv.bmw.test.bmw530e;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import org.junit.Test;
@@ -11,15 +12,16 @@ public class GeoCodeTest {
 
 	@Test
 	public void test() {
-		String longitude = "51.155693";
-		String latitude = "4.5149717";
+		String latitude = "51.155693";
+		String longitude = "4.5149717";
 		GeoCodeServiceConnector geocodeConnector = new GeoCodeServiceConnector();
-//		Geocode geocode = geocodeConnector.scheduleGeoCodeCalls(longitude, latitude);
-//		if (geocode == null || geocode.getStaddress().length()==0) {
-//			fail("Nothing received");
-//		} else {
-//			System.out.println(geocode.getStaddress()+" "+geocode.getStnumber());
-//		}
+		Geocode geo = geocodeConnector.getGeoCodeFromUrl(latitude, longitude);
+		if (geo == null) {
+			fail("Nothing received");
+		} else {
+			assertEquals(geo.getCity(), "Boechout");
+			System.out.println(geo.getCity());
+		}
 	}
 
 }

@@ -29,7 +29,7 @@ public class GeoCodeServiceConnector {
 
 	private static final Logger log = LoggerFactory.getLogger(GeoCodeServiceConnector.class);
 
-	private static final String GEOCODE_URL = "https://geocode.xyz/latitude,longitude?geoit=json";
+	private static final String GEOCODE_URL = "https://geocode.xyz/longitude,latitude?geoit=json";
 //	private static final String GEOCODE_URL = "http://127.0.0.1:5500/geocode.json";
 
 	@Autowired
@@ -55,7 +55,7 @@ public class GeoCodeServiceConnector {
 		return true;
 	}
 	
-	private Geocode getGeoCodeFromUrl(String longitude, String latitude) {
+	public Geocode getGeoCodeFromUrl(String longitude, String latitude) {
 		// get the information from BMW
 		RestTemplate restTemplate = new RestTemplate();
 		ResponseEntity<Geocode> geocodeAnswer = null;
