@@ -80,7 +80,7 @@ public class LocationController {
 			location.setDate(formatDate);
 			location.setTime(formatTime);
 			result = locationRespository.save(location);
-		} 
+		}
 		return result;
 	}
 

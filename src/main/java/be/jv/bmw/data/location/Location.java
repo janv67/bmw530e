@@ -49,6 +49,11 @@ public class Location {
 	private double socMax;
 	private boolean pendingUpdate;
 	private boolean vehicleTracking;
+	private String geo_city;
+	private String geo_street;
+	private String geo_number;
+	private String geo_postal;
+	
 	public double getLatitude() {
 		return latitude;
 	}
@@ -131,6 +136,30 @@ public class Location {
 	}
 	public String toString(){
 		return new com.google.gson.Gson().toJson(this);
+	}
+	public String getGeo_city() {
+		return geo_city;
+	}
+	public void setGeo_city(String geo_city) {
+		this.geo_city = geo_city;
+	}
+	public String getGeo_street() {
+		return geo_street;
+	}
+	public void setGeo_street(String geo_street) {
+		this.geo_street = geo_street;
+	}
+	public String getGeo_number() {
+		return geo_number;
+	}
+	public void setGeo_number(String geo_number) {
+		this.geo_number = geo_number;
+	}
+	public String getGeo_postal() {
+		return geo_postal;
+	}
+	public void setGeo_postal(String geo_postal) {
+		this.geo_postal = geo_postal;
 	}
 
 }

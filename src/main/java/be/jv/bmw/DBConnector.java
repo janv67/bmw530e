@@ -161,13 +161,10 @@ public class DBConnector {
 		}
 	}
 
-	public boolean fetchGeoCode(String latitude, String longitude) {
-		Optional<String> geocode = geocodeRepository.findGeocodeInfoByLongLat(latitude, longitude);
-		if (geocode.isPresent()) {
-			return true;
-		} else {
-			return false;
-		}
+	public List<BMWGeocodes> fetchGeoCode(String latitude, String longitude) {
+		List<BMWGeocodes> geocodes = geocodeRepository.findAll();
+		geocodes = geocodeRepository.findGeocodeInfoByLongLat(latitude, longitude);
+		return geocodes;
 	}
 
 }

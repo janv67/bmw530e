@@ -1,6 +1,7 @@
 package be.jv.bmw;
 
 import java.util.Collections;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,23 +37,25 @@ public class GeoCodeServiceConnector {
 	DBConnector dbConnector;
 
 	
-	public boolean storeGeoCodeCalls(String latitude, String longitude) {
-		boolean isFetched = dbConnector.fetchGeoCode(latitude, longitude);
-		if (!isFetched) {
-			BMWGeocodes geocodes = new BMWGeocodes();
+	public BMWGeocodes storeGeoCodeCalls(String latitude, String longitude) {
+		BMWGeocodes geocode = new BMWGeocodes();
+		List<BMWGeocodes> geocodes = dbConnector.fetchGeoCode(latitude, longitude);
+		if (geocodes.size()==0) {
 			Geocode geo = getGeoCodeFromUrl(latitude, longitude);
 			if (geo != null) {
-				geocodes.setLatitude(latitude);
-				geocodes.setLongitude(longitude);
-				geocodes.setStaddress(geo.getStaddress());
-				geocodes.setCity(geo.getCity());
-				geocodes.setStnumber(geo.getStnumber().toString());
-				geocodes.setPostal(geo.getPostal());
-				geocodes.setGeonumber(geo.getGeonumber());
-				dbConnector.storeGeoCode(geocodes);
-			}
+				geocode.setLatitude(latitude);
+				geocode.setLongitude(longitude);
+				geocode.setStaddress(geo.getStaddress());
+				geocode.setCity(geo.getCity());
+				geocode.setStnumber(geo.getStnumber().toString());
+				geocode.setPostal(geo.getPostal());
+				geocode.setGeonumber(geo.getGeonumber());
+				dbConnector.storeGeoCode(geocode);
+			} 
+		} else {
+			geocode = geocodes.get(0);
 		}
-		return true;
+		return geocode;
 	}
 	
 	public Geocode getGeoCodeFromUrl(String longitude, String latitude) {
