@@ -15,7 +15,6 @@ import be.jv.bmw.data.dynamic.Dynamic;
 import be.jv.bmw.data.efficiency.Efficiency;
 import be.jv.bmw.data.efficiency.LastTripList;
 import be.jv.bmw.data.geocode.BMWGeocodes;
-import be.jv.bmw.data.geocode.Geocode;
 import be.jv.bmw.data.location.Location;
 import be.jv.bmw.data.repositories.DynamicRespository;
 import be.jv.bmw.data.repositories.EfficiencyRespository;
@@ -39,7 +38,7 @@ public class DBConnector {
 
 	private static final Logger log = LoggerFactory.getLogger(DBConnector.class);
 
-	public void storeDynamicInfo(Dynamic dynamic) {
+	public boolean storeDynamicInfo(Dynamic dynamic) {
 		// get last stored id
 		List<Dynamic> ids = dynamicRespository.findLast();
 		Object id = ids.get(0);
@@ -70,9 +69,11 @@ public class DBConnector {
 			log.info("No new dynamic data found");
 
 		}
+		return storeInfo;
 	}
 
-	private void storeLocationInfo(Location location) {
+	public void storeLocationInfo(Location location) {
+		boolean storeData = false;
 		// get last stored id
 		List<Location> ids = locationRespository.findLast();
 		Object id = ids.get(0);
@@ -80,10 +81,21 @@ public class DBConnector {
 		if (ids.get(0) != null) {
 			intId = Integer.parseInt(id.toString());
 		}
+		// get last efficiency registered
+		Optional<Location> storedLocation = locationRespository.findById(intId);
+		if (storedLocation.isPresent()) {
+			Location loc = storedLocation.get();
+			if (location.getLatitude()==loc.getLatitude() && location.getLongitude()==loc.getLongitude()) {
+				storeData = false;
+			} else {
+				// Location changed, so upload the data
+				storeData = true;
+			}
+		}
 
-		// get last dynamic info registered
-//		Optional<Dynamic> storedDynamic = dynamicRespository.findById(intId);
-		locationRespository.save(location);
+		if (storeData) {
+			locationRespository.save(location);
+		}
 
 	}
 
