@@ -52,7 +52,8 @@ public class BmwConnectedRequester {
 	@Autowired
 	ScheduledTimer timer;
 
-	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+	private static final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-dd");
 
 	public BmwConnectedRequester() {
 		super();
@@ -60,7 +61,7 @@ public class BmwConnectedRequester {
 
 	public void scheduledCalls() {
 		log.info("---------------------------------------------------------------");
-		log.info("Connecting to the car services : the time is now {}", dateFormat.format(new Date()));
+		log.info("Connecting to the car services : the time is now {}", timeFormat.format(new Date()));
 		locationCalls();
 		efficiencyCalls();
 		boolean carMoved = dynamicCalls();
@@ -92,6 +93,8 @@ public class BmwConnectedRequester {
 		log.info("Navigation fetched successfully ");
 
 		Location location = bmwAnswer.getBody();
+		location.setDate(dateFormat.format(new Date()));
+		location.setTime(timeFormat.format(new Date()));
 		dbConnector.storeLocationInfo(location);
 	}
 

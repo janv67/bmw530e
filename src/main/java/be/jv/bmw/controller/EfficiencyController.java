@@ -9,6 +9,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,16 +35,19 @@ public class EfficiencyController {
 	@Autowired 
 	DBConnector dbConnector;
 
-	@GetMapping("/efficiency")
+    @CrossOrigin
+    @GetMapping("/efficiency")
 	public List<Efficiency> showAll() {
 		return efficiencyRespository.findAll();
 	}
 
+    @CrossOrigin
 	@GetMapping("/efficiency/last")
 	public List<Efficiency> lastRecord() {
 		return efficiencyRespository.findLast();
 	}
 
+    @CrossOrigin
 	@GetMapping("/efficiency/{id}")
 	public Efficiency show(@PathVariable String id) {
 		int efficiencyId = Integer.parseInt(id);
@@ -56,6 +60,7 @@ public class EfficiencyController {
 		}
 	}
 
+    @CrossOrigin
 	@PostMapping("/efficiency")
 	public Efficiency create(@RequestBody String body) {
 

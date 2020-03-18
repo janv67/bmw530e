@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,12 +24,14 @@ public class LocationController {
 	@Autowired
 	LocationRespository locationRespository;
 
-	@GetMapping("/location")
+    @CrossOrigin
+    @GetMapping("/location")
 	public List<Location> showAll() {
 		return locationRespository.findAll();
 	}
 
-	@GetMapping("/location/{id}")
+    @CrossOrigin
+    @GetMapping("/location/{id}")
 	public Location show(@PathVariable String id) {
 		int locationId = Integer.parseInt(id);
 		Optional<Location> location = locationRespository.findById(locationId);
@@ -40,7 +43,8 @@ public class LocationController {
 		}
 	}
 
-	@PostMapping("/location")
+    @CrossOrigin
+    @PostMapping("/location")
 	public Location create(@RequestBody String body) {
 
 		// JSON from file to Object

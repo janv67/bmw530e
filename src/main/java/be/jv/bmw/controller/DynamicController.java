@@ -10,58 +10,38 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import be.jv.bmw.GeoCodeServiceConnector;
+import be.jv.bmw.data.dynamic.Dynamic;
 import be.jv.bmw.data.geocode.BMWGeocodes;
 import be.jv.bmw.data.location.Location;
-import be.jv.bmw.data.repositories.LocationRespository;
+import be.jv.bmw.data.repositories.DynamicRespository;
 
 @RestController
 public class DynamicController {
 
 	@Autowired
-	LocationRespository locationRespository;
+	DynamicRespository dynamicRespository;
 
 	@Autowired
 	GeoCodeServiceConnector geocodeService;
 	
     @CrossOrigin
 	@GetMapping("/dynamic")
-	public List<Location> showAll() {
-    	List<Location> locs = locationRespository.findAll();
-		return locs;
+	public List<Dynamic> showAll() {
+    	List<Dynamic> dyn = dynamicRespository.findAll();
+		return dyn;
 	}
 
     @CrossOrigin
 	@GetMapping("/dynamic/{id}")
-	public Location show(@PathVariable String id) {
-		int locationId = Integer.parseInt(id);
-		Optional<Location> location = locationRespository.findById(locationId);
+	public Dynamic show(@PathVariable String id) {
+		int dynamicId = Integer.parseInt(id);
+		Optional<Dynamic> dynamic = dynamicRespository.findById(dynamicId);
 
-		if (location.isPresent()) {
-			return location.get();
+		if (dynamic.isPresent()) {
+			return dynamic.get();
 		} else {
-			return new Location();
+			return new Dynamic();
 		}
 	}
     
-	@GetMapping("/dynamicwithgeocodes")
-	public List<Location> loadgeocode() {
-		boolean loaded = false;
-		List<Location> locations = locationRespository.findAll();
-		for (Location location : locations) {
-			if (location.getGeo_city() == null || location.getGeo_city().length() == 0) {
-				BMWGeocodes geo = geocodeService.storeGeoCodeCalls(String.valueOf(location.getLatitude()),
-						String.valueOf(location.getLongitude()));
-				if (geo.getCity() != null) {
-					location.setGeo_city(geo.getCity());
-					location.setGeo_postal(geo.getPostal());
-					location.setGeo_street(geo.getStaddress());
-					location.setGeo_number(geo.getStnumber());
-					locationRespository.save(location);
-				}
-			}
-		}
-		return locations;
-	}
-
-
 }
