@@ -27,7 +27,19 @@ public class LocationController {
     @CrossOrigin
     @GetMapping("/location")
 	public List<Location> showAll() {
-		return locationRespository.findAll();
+    	List<Location> locs = locationRespository.findAll();
+		return locs;
+	}
+
+    @CrossOrigin
+    @GetMapping("/location/date/{datum}")
+	public List<Location> showByDate(@PathVariable String datum) {
+    	List<Location> locs = locationRespository.findByDate(datum);
+    	for (Location location : locs) {
+			
+		}
+    	
+		return locs;
 	}
 
     @CrossOrigin

@@ -9,12 +9,12 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "bmw_location")
 public class Location {
-	public Location(double latitude, double longitude) {
+	public Location(String latitude, String longitude) {
 		super();
 		this.latitude = latitude;
 		this.longitude = longitude;
 	}
-	public Location(double latitude, double longitude, String isoCountryCode, double auxPowerRegular,
+	public Location(String latitude, String longitude, String isoCountryCode, double auxPowerRegular,
 			double auxPowerEcoPro, double auxPowerEcoProPlus, double soc, double socMax, boolean pendingUpdate,
 			boolean vehicleTracking) {
 		super();
@@ -39,8 +39,8 @@ public class Location {
     private int id;
 	private String date="";
 	private String time="";
-	private double latitude;
-	private double longitude;
+    private String latitude;
+	private String longitude;
 	private String isoCountryCode ="";
 	private double auxPowerRegular;
 	private double auxPowerEcoPro;
@@ -49,21 +49,22 @@ public class Location {
 	private double socMax;
 	private boolean pendingUpdate;
 	private boolean vehicleTracking;
+	
 	private String geo_city;
 	private String geo_street;
 	private String geo_number;
 	private String geo_postal;
 	
-	public double getLatitude() {
+	public String getLatitude() {
 		return latitude;
 	}
-	public void setLatitude(double latitude) {
+	public void setLatitude(String latitude) {
 		this.latitude = latitude;
 	}
-	public double getLongitude() {
+	public String getLongitude() {
 		return longitude;
 	}
-	public void setLongitude(double longitude) {
+	public void setLongitude(String longitude) {
 		this.longitude = longitude;
 	}
 	public String getIsoCountryCode() {

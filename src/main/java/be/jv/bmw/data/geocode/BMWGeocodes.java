@@ -21,7 +21,8 @@ public class BMWGeocodes {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-	private String latitude;
+
+    private String latitude;
 	private String longitude;
 	private String geonumber;
 	private String staddress;

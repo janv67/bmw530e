@@ -1,5 +1,6 @@
 package be.jv.bmw;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -14,10 +15,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import be.jv.bmw.data.geocode.BMWGeocodes;
+import be.jv.bmw.data.geocode.GeoData;
 import be.jv.bmw.data.geocode.Geocode;
 
 @Configuration
@@ -29,27 +33,23 @@ import be.jv.bmw.data.geocode.Geocode;
 public class GeoCodeServiceConnector { 
 
 	private static final Logger log = LoggerFactory.getLogger(GeoCodeServiceConnector.class);
+// http://api.positionstack.com/v1/reverse?access_key=19f298e76a9160fe33be65c435ea9da4&query=longitude,latitude
 
-	private static final String GEOCODE_URL = "https://geocode.xyz/longitude,latitude?geoit=json";
+	private static final String GEOCODE_URL = "http://api.positionstack.com/v1/reverse?access_key=19f298e76a9160fe33be65c435ea9da4&query=longitude,latitude";
 //	private static final String GEOCODE_URL = "http://127.0.0.1:5500/geocode.json";
 
 	@Autowired
 	DBConnector dbConnector;
 
-	
-	public BMWGeocodes storeGeoCodeCalls(String latitude, String longitude) {
+	public BMWGeocodes getGeoCode(String latitude, String longitude) {
 		BMWGeocodes geocode = new BMWGeocodes();
 		List<BMWGeocodes> geocodes = dbConnector.fetchGeoCode(latitude, longitude);
 		if (geocodes.size()==0) {
-			Geocode geo = getGeoCodeFromUrl(latitude, longitude);
+			GeoData geo = getGeoCodeFromUrl(latitude, longitude);
 			if (geo != null) {
-				geocode.setLatitude(latitude);
-				geocode.setLongitude(longitude);
-				geocode.setStaddress(geo.getStaddress());
-				geocode.setCity(geo.getCity());
-				geocode.setStnumber(geo.getStnumber().toString());
-				geocode.setPostal(geo.getPostal());
-				geocode.setGeonumber(geo.getGeonumber());
+				geocode.setLatitude(String.valueOf(geo.getData().get(0).getLatitude()));
+				geocode.setLongitude(String.valueOf(geo.getData().get(0).getLongitude()));
+				geocode.setStaddress(geo.getData().get(0).getLabel());
 				dbConnector.storeGeoCode(geocode);
 			} 
 		} else {
@@ -58,14 +58,20 @@ public class GeoCodeServiceConnector {
 		return geocode;
 	}
 	
-	public Geocode getGeoCodeFromUrl(String longitude, String latitude) {
+	public GeoData getGeoCodeFromUrl(String longitude, String latitude) {
 		// get the information from BMW
 		RestTemplate restTemplate = new RestTemplate();
-		ResponseEntity<Geocode> geocodeAnswer = null;
+		
+		List<HttpMessageConverter<?>> messageConverters = new ArrayList();
+		MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+		converter.setSupportedMediaTypes(Collections.singletonList(MediaType.APPLICATION_JSON));
+		messageConverters.add(converter);
+		restTemplate.setMessageConverters(messageConverters);
+		ResponseEntity<GeoData> geocodeAnswer = null;
 		String geoCodeUrl = GEOCODE_URL.replaceAll("longitude", longitude);
 		geoCodeUrl = geoCodeUrl.replaceAll("latitude", latitude);
 		try {
-			geocodeAnswer = restTemplate.exchange(geoCodeUrl, HttpMethod.GET, getHttpEntity(), Geocode.class);
+			geocodeAnswer = restTemplate.exchange(geoCodeUrl, HttpMethod.GET, getHttpEntity(), GeoData.class);
 		} catch (Exception e) {
 			if (geocodeAnswer == null) {
 				log.error("GEOCODE Connection error, retrying");

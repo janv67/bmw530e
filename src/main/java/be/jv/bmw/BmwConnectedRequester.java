@@ -144,7 +144,7 @@ public class BmwConnectedRequester {
 		}
 		String longitude = bmwAnswer.getBody().getAttributesMap().getGps_lng();
 		String latitude = bmwAnswer.getBody().getAttributesMap().getGps_lat();
-		geocodeConnector.storeGeoCodeCalls(latitude, longitude);
+		geocodeConnector.getGeoCode(latitude, longitude);
 		log.info("Dynamic fetched successfully ");
 
 		// store the information using internal API
