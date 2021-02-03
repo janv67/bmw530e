@@ -62,11 +62,11 @@ public class BmwConnectedRequester {
 	public void scheduledCalls() {
 		log.info("---------------------------------------------------------------");
 		log.info("Connecting to the car services : the time is now {}", timeFormat.format(new Date()));
-		locationCalls();
-		efficiencyCalls();
 		boolean carMoved = dynamicCalls();
 		// if car service was connected, set the next time the service should be executed
 		if (carMoved) {
+			locationCalls();
+			efficiencyCalls();
 			timer.decrementTimer();
 		} else {
 			timer.incrementTimer();

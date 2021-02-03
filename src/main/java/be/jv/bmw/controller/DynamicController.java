@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import be.jv.bmw.GeoCodeServiceConnector;
 import be.jv.bmw.data.dynamic.Dynamic;
-import be.jv.bmw.data.geocode.BMWGeocodes;
-import be.jv.bmw.data.location.Location;
 import be.jv.bmw.data.repositories.DynamicRespository;
 
 @RestController

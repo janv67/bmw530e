@@ -53,11 +53,20 @@ public class DBConnector {
 
 		if (storedDynamic.isPresent()) {
 			Dynamic storedDynamicInfo = storedDynamic.get();
-			String lastStoredDateTime = storedDynamicInfo.getAttributesMap().getUpdateTime_converted();
-			String deliveredDateTime = dynamic.getAttributesMap().getUpdateTime_converted();
-			if (!deliveredDateTime.equals(lastStoredDateTime)) {
+			
+//			no longer checking on times as too much info was stored and the UI became too slow
+			
+//			String lastStoredDateTime = storedDynamicInfo.getAttributesMap().getUpdateTime_converted();
+//			String deliveredDateTime = dynamic.getAttributesMap().getUpdateTime_converted();
+//			if (!deliveredDateTime.equals(lastStoredDateTime)) {
+//				storeInfo = true;
+//			}
+			String lastStoredMileage = storedDynamicInfo.getAttributesMap().getMileage();
+			String deliveredMileage = dynamic.getAttributesMap().getMileage();
+			if (!lastStoredMileage.equals(deliveredMileage)) {
 				storeInfo = true;
 			}
+			
 		} else {
 			storeInfo = true;
 		}
@@ -174,8 +183,7 @@ public class DBConnector {
 	}
 
 	public List<BMWGeocodes> fetchGeoCode(String latitude, String longitude) {
-		List<BMWGeocodes> geocodes = geocodeRepository.findAll();
-		geocodes = geocodeRepository.findGeocodeInfoByLongLat(latitude, longitude);
+		List<BMWGeocodes> geocodes = geocodeRepository.findGeocodeInfoByLongLat(latitude, longitude);
 		return geocodes;
 	}
 

@@ -47,9 +47,14 @@ public class GeoCodeServiceConnector {
 		if (geocodes.size()==0) {
 			GeoData geo = getGeoCodeFromUrl(latitude, longitude);
 			if (geo != null) {
-				geocode.setLatitude(String.valueOf(geo.getData().get(0).getLatitude()));
-				geocode.setLongitude(String.valueOf(geo.getData().get(0).getLongitude()));
-				geocode.setStaddress(geo.getData().get(0).getLabel());
+				geocode.setLatitude(latitude);
+				geocode.setLongitude(longitude);
+				geocode.setPostal(geo.getData().get(0).getPostal_code());
+				geocode.setStaddress(geo.getData().get(0).getStreet());
+				geocode.setStnumber(geo.getData().get(0).getNumber());
+				if (geocode.getStaddress().length()==0) {
+					geocode.setStaddress(geo.getData().get(0).getLabel());
+				}
 				dbConnector.storeGeoCode(geocode);
 			} 
 		} else {
