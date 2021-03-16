@@ -1,12 +1,11 @@
 package be.jv.bmw.data.dynamic;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
-import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
 @Entity
@@ -24,8 +23,8 @@ public class Dynamic {
 		this.id = id;
 	}
 
-	@OrderColumn(name = "attributes_map_object")
-	@OneToOne(cascade=CascadeType.ALL)
+	@OneToOne
+	@JoinColumn(name = "attributesMapObject_id")
 	AttributesMap attributesMapObject;
 
 	// Getter Methods

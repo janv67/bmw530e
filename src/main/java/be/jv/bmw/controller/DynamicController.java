@@ -30,6 +30,15 @@ public class DynamicController {
 	}
 
     @CrossOrigin
+    @GetMapping("/dynamic/date/{datum}")
+	public List<Dynamic> showByDate(@PathVariable String datum) {
+    	//Dateformat in attributesmap is different
+    	String dynamicDate = datum.substring(8)+"."+datum.substring(5,7)+"."+datum.substring(0,4);
+    	List<Dynamic> dyns = dynamicRespository.findByDate(dynamicDate);
+		return dyns;
+	}
+
+    @CrossOrigin
 	@GetMapping("/dynamic/{id}")
 	public Dynamic show(@PathVariable String id) {
 		int dynamicId = Integer.parseInt(id);

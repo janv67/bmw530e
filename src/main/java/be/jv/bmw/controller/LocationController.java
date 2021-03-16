@@ -66,8 +66,6 @@ public class LocationController {
 		    			locationRespository.save(location);
 	        		}
 	    		}
-    		} else {
-    			String jan="";
     		}
 		}
     	

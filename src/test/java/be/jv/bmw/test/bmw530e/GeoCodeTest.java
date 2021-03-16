@@ -7,7 +7,6 @@ import org.junit.Test;
 
 import be.jv.bmw.GeoCodeServiceConnector;
 import be.jv.bmw.data.geocode.GeoData;
-import be.jv.bmw.data.geocode.Geocode;
 
 public class GeoCodeTest {
 
