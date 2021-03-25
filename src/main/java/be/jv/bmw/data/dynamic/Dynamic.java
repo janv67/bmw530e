@@ -1,5 +1,6 @@
 package be.jv.bmw.data.dynamic;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,7 +24,7 @@ public class Dynamic {
 		this.id = id;
 	}
 
-	@OneToOne
+	@OneToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name = "attributesMapObject_id")
 	AttributesMap attributesMapObject;
 
